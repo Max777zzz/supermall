@@ -3,11 +3,11 @@
     <nav-bar>
       <div slot="center">购物街</div>
     </nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <home-recommend :recommends="recommends"></home-recommend>
-    <home-feature></home-feature>
-    <tab-control :titles="titles" @tabClick="tabClick"></tab-control>
-    <goods-list :goods="goods[currentType].list"></goods-list>
+    <home-swiper :banners="banners" />
+    <home-recommend :recommends="recommends" />
+    <home-feature />
+    <tab-control :titles="titles" @tabClick="tabClick" />
+    <goods-list :goods="goods[currentType].list" />
   </div>
 </template>
 
