@@ -3,16 +3,26 @@
     <nav-bar>
       <div slot="center">购物街</div>
     </nav-bar>
-    <home-swiper :banners="banners" />
-    <home-recommend :recommends="recommends" />
-    <home-feature />
-    <tab-control :titles="titles" @tabClick="tabClick" />
-    <goods-list :goods="goods[currentType].list" />
+    <scroll
+      class="content"
+      ref="Scroll"
+      :probe-type="3"
+      @scroll="contentScroll"
+    >
+      <home-swiper :banners="banners" />
+      <home-recommend :recommends="recommends" />
+      <home-feature />
+      <tab-control :titles="titles" @tabClick="tabClick" />
+      <goods-list :goods="goods[currentType].list" />
+    </scroll>
+    <!-- 修饰符 .native 监听组件根元素的原生事件 -->
+    <back-top @click.native="backClick" v-show="isShow" />
   </div>
 </template>
 
 <script>
 import NavBar from 'components/common/navbar/NavBar'
+import Scroll from 'components/common/scroll/Scroll'
 
 import TabControl from 'components/content/TabControl'
 import GoodsList from 'components/content/goods/GoodsList'
@@ -22,6 +32,8 @@ import HomeRecommend from './childComponents/HomeRecommend'
 import HomeFeature from './childComponents/HomeFeature'
 
 import { getHomeMultidata, getHomeGoods } from 'network/home'
+
+import BackTop from 'components/content/backTop/BackTop'
 export default {
   name: 'Home',
   components: {
@@ -31,6 +43,8 @@ export default {
     HomeFeature,
     TabControl,
     GoodsList,
+    Scroll,
+    BackTop,
   },
   data() {
     return {
@@ -43,6 +57,7 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: 'pop',
+      isShow: false,
     }
   },
   created() {
@@ -67,6 +82,12 @@ export default {
           this.currentType = 'sell'
           break
       }
+    },
+    backClick() {
+      this.$refs.Scroll.scrollTop(0, 0)
+    },
+    contentScroll(position) {
+      this.isShow = -position.y > 1000
     },
 
     // 网络请求
@@ -101,7 +122,8 @@ export default {
 
 <style scoped>
 #home {
-  padding-top: 44px;
+  height: 100vh;
+  position: relative;
 }
 .nav-bar {
   position: fixed;
@@ -113,5 +135,14 @@ export default {
 .tab-control {
   position: sticky;
   top: 44px;
+  z-index: 10;
+}
+.content {
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  bottom: 50px;
+  left: 0;
+  right: 0;
 }
 </style>

@@ -8,7 +8,7 @@
     >
       <slot></slot>
     </div>
-    <slot name="indicator"> </slot>
+    <slot name="indicator"></slot>
     <div class="indicator">
       <slot name="indicator" v-if="showIndicator && slideCount > 1">
         <div
