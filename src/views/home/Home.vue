@@ -7,6 +7,7 @@
       class="content"
       ref="Scroll"
       :probe-type="3"
+      :pullUpLoad="true"
       @scroll="contentScroll"
     >
       <home-swiper :banners="banners" />
@@ -63,9 +64,18 @@ export default {
   created() {
     // 1.请求多个数据
     this.getHomeMultidata(),
+      // 2.请求商品数据
       this.getHomeGoods('pop'),
       this.getHomeGoods('new'),
       this.getHomeGoods('sell')
+  },
+  mounted() {
+    const refresh = this.debounce(this.$refs.scroll.refresh, 500)
+
+    this.$bus.$on('itemImageLoad', () => {
+      refresh()
+      // this.$refs.Scroll.refresh()
+    })
   },
   methods: {
     // 事件监听
@@ -89,7 +99,15 @@ export default {
     contentScroll(position) {
       this.isShow = -position.y > 1000
     },
-
+    debounce(func, delay) {
+      let timer = null
+      return function(...args) {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+          func.apply(this, args)
+        }, delay)
+      }
+    },
     // 网络请求
     getHomeMultidata() {
       getHomeMultidata().then(
@@ -103,18 +121,13 @@ export default {
         }
       )
     },
-    getHomeGoods(type, num) {
+    getHomeGoods(type) {
       const page = this.goods[type].page + 1
-      getHomeGoods(type, page).then(
-        (res) => {
-          console.log(res)
-          this.goods[type].list.push(...res.data.list)
-          this.goods[type].page += 1
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
+      getHomeGoods(type, page).then((res) => {
+        console.log(res)
+        this.goods[type].list.push(...res.data.list)
+        this.goods[type].page += 1
+      })
     },
   },
 }

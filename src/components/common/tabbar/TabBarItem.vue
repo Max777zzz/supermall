@@ -1,6 +1,6 @@
 <template>
   <div class="tab-bar-item" @click="itemClick">
-    <div :style="activeStyle" @click="isActive = !isActive">
+    <div :style="activeStyle">
       <slot name="item-icon"></slot>
       <slot name="item-name"></slot>
     </div>
