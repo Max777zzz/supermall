@@ -30,9 +30,16 @@ export default {
       pullUpLoad: this.pullUpLoad,
     })
     // 监听滚动的位置
-    this.scroll.on('scroll', (position) => {
-      this.$emit('scroll', position)
-    })
+    if (this.probeType === 2 || this.probeType === 3) {
+      this.scroll.on('scroll', (position) => {
+        this.$emit('scroll', position)
+      })
+    }
+    if (this.pullUpLoad) {
+      this.scroll.on('pullingUp', () => {
+        this.$emit('pullingUp')
+      })
+    }
   },
   methods: {
     scrollTop(x, y, time = 300) {
@@ -40,6 +47,12 @@ export default {
     },
     refresh() {
       this.scroll && this.scroll.refresh()
+    },
+    finishPullUp() {
+      this.scroll && this.scroll.finishPullUp()
+    },
+    getScrollY() {
+      return this.scroll ? this.scroll.y : 0
     },
   },
 }
