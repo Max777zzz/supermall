@@ -1,8 +1,11 @@
 <template>
   <div id="detail">
-    <detail-nav-bar />
-    <detail-swiper :topImages="topImages" />
-    <detail-base-info :goods="goods" />
+    <detail-nav-bar class="nav-bar" />
+    <scroll class="content">
+      <detail-swiper :topImages="topImages" />
+      <detail-base-info :goods="goods" />
+      <detail-shop-info :shop="shop" />
+    </scroll>
   </div>
 </template>
 
@@ -10,20 +13,26 @@
 import DetailNavBar from './childComponents/DetailNavBar'
 import DetailSwiper from './childComponents/DetailSwiper'
 import DetailBaseInfo from './childComponents/DetailBaseInfo'
+import DetailShopInfo from './childComponents/DetailShopInfo'
 
-import { getDetail, Goods } from 'network/detail.js'
+import Scroll from 'components/common/scroll/Scroll'
+
+import { getDetail, Goods, Shop } from 'network/detail.js'
 export default {
   name: 'Detail',
   components: {
     DetailNavBar,
     DetailSwiper,
     DetailBaseInfo,
+    DetailShopInfo,
+    Scroll,
   },
   data() {
     return {
       iid: null,
       topImages: [],
       goods: {},
+      shop: {},
     }
   },
   created() {
@@ -41,9 +50,26 @@ export default {
         data.columns,
         data.shopInfo.services
       )
+      // 获取店铺信息
+      this.shop = new Shop(data.shopInfo)
     })
   },
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+#detail {
+  position: relative;
+  z-index: 10;
+  background-color: #fff;
+  height: 100vh;
+}
+.nav-bar {
+  position: relative;
+  z-index: 10;
+  background-color: #fff;
+}
+.content {
+  height: calc(100% - 44px);
+}
+</style>

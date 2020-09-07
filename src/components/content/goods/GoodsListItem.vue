@@ -46,4 +46,10 @@ export default {
   float: right;
   color: orangered;
 }
+.titles {
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>

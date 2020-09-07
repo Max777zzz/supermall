@@ -30,6 +30,9 @@ export default {
   props: {
     goods: {
       type: Object,
+      defualt() {
+        return {}
+      },
     },
   },
 }
@@ -44,17 +47,67 @@ export default {
 }
 .info-title {
   color: #222;
+  font-size: 14px;
 }
 .info-price {
+  position: relative;
   margin-top: 10px;
 }
 .info-price .n-price {
-  font-size: 24px;
+  font-size: 18px;
   color: blueviolet;
 }
 .info-price .o-price {
-  font-size: 13px;
-  margin-left: 5px;
+  font-size: 14px;
+  margin: 0 2px 0 5px;
   text-decoration: line-through;
+}
+.info-price .discount {
+  position: absolute;
+  top: 2px;
+  text-align: center;
+  font-size: 12px;
+  color: #eee;
+  border-radius: 5px;
+  background-color: blueviolet;
+}
+.info-other {
+  display: flex;
+  font-size: 12px;
+  padding: 15px 0 10px;
+  justify-content: space-between;
+}
+.info-other > span {
+  flex: 1;
+  text-align: center;
+}
+.info-other > span:first-child {
+  text-align: left;
+}
+.info-other > span:last-child {
+  text-align: right;
+}
+.info-service {
+  display: flex;
+  font-size: 12px;
+  color: #666;
+  padding: 15px 0 10px;
+}
+.info-service-item {
+  flex: 1;
+  text-align: center;
+}
+.info-service-item:first-child {
+  text-align: left;
+}
+.info-service-item:last-child {
+  text-align: right;
+}
+.info-service-item img {
+  width: 14px;
+}
+.info-service-item span {
+  position: relative;
+  top: -3px;
 }
 </style>
