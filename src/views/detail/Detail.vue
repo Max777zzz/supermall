@@ -6,6 +6,7 @@
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad" />
+      <detail-param-info :paramInfo="paramInfo" />
     </scroll>
   </div>
 </template>
@@ -16,10 +17,11 @@ import DetailSwiper from './childComponents/DetailSwiper'
 import DetailBaseInfo from './childComponents/DetailBaseInfo'
 import DetailShopInfo from './childComponents/DetailShopInfo'
 import DetailGoodsInfo from './childComponents/DetailGoodsInfo'
+import DetailParamInfo from './childComponents/DetailParamInfo'
 
 import Scroll from 'components/common/scroll/Scroll'
 
-import { getDetail, Goods, Shop } from 'network/detail.js'
+import { getDetail, Goods, Shop, GoodsParam } from 'network/detail.js'
 export default {
   name: 'Detail',
   components: {
@@ -28,6 +30,7 @@ export default {
     DetailBaseInfo,
     DetailShopInfo,
     DetailGoodsInfo,
+    DetailParamInfo,
     Scroll,
   },
   data() {
@@ -37,27 +40,39 @@ export default {
       goods: {},
       shop: {},
       detailInfo: {},
+      paramInfo: {},
     }
   },
   created() {
     // 保存传入的iid
     this.iid = this.$route.params.iid
+
     // 根据iid请求详情数据
     getDetail(this.iid).then((res) => {
       console.log(res)
+
       // 获取顶部轮播图片
       const data = res.result
       this.topImages = data.itemInfo.topImages
+
       // 获取商品信息
       this.goods = new Goods(
         data.itemInfo,
         data.columns,
         data.shopInfo.services
       )
+
       // 获取店铺信息
       this.shop = new Shop(data.shopInfo)
+
       // 保存商品的详情数据
       this.detailInfo = data.detailInfo
+
+      // 获取参数信息
+      this.paramInfo = new GoodsParam(
+        data.itemParams.info,
+        data.itemParams.rule
+      )
     })
   },
   methods: {
@@ -82,5 +97,6 @@ export default {
 }
 .content {
   height: calc(100% - 44px);
+  overflow: hidden;
 }
 </style>

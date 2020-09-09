@@ -63,7 +63,9 @@ export default {
 }
 .goods-info {
   width: 100%;
+  padding: 20px 0;
   background-color: #fff;
+  border-bottom: 5px solid #f2f5f8;
 }
 .start {
   float: left;
