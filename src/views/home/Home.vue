@@ -183,13 +183,6 @@ export default {
   height: 100vh;
   position: relative;
 }
-.nav-bar {
-  /* position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 10; */
-}
 .tab-control {
   position: relative;
   z-index: 10;
