@@ -8,6 +8,7 @@
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad" />
       <detail-param-info :paramInfo="paramInfo" />
       <detail-comment-info :commentInfo="commentInfo" />
+      <goods-list class="goodsList" :goods="recommends" />
     </scroll>
   </div>
 </template>
@@ -22,8 +23,18 @@ import DetailParamInfo from './childComponents/DetailParamInfo'
 import DetailCommentInfo from './childComponents/DetailCommentInfo'
 
 import Scroll from 'components/common/scroll/Scroll'
+import GoodsList from 'components/content/goods/GoodsList'
 
-import { getDetail, Goods, Shop, GoodsParam } from 'network/detail.js'
+import { debounce } from 'common/utils.js'
+
+import {
+  getDetail,
+  getRecommend,
+  Goods,
+  Shop,
+  GoodsParam,
+} from 'network/detail.js'
+
 export default {
   name: 'Detail',
   components: {
@@ -35,6 +46,7 @@ export default {
     DetailParamInfo,
     DetailCommentInfo,
     Scroll,
+    GoodsList,
   },
   data() {
     return {
@@ -45,6 +57,7 @@ export default {
       detailInfo: {},
       paramInfo: {},
       commentInfo: {},
+      recommends: [],
     }
   },
   created() {
@@ -82,6 +95,15 @@ export default {
       if (data.rate.cRate !== 0) {
         this.commentInfo = data.rate.list[0]
       }
+    }),
+      getRecommend().then((res) => {
+        this.recommends = res.data.list
+      })
+  },
+  mounted() {
+    const refresh = debounce(this.$refs.Scroll.refresh, 500)
+    this.$bus.$on('itemImgLoad', () => {
+      refresh()
     })
   },
   methods: {
@@ -107,5 +129,8 @@ export default {
 .content {
   height: calc(100% - 44px);
   overflow: hidden;
+}
+.goodsList {
+  padding: 10px 0;
 }
 </style>

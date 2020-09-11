@@ -41,6 +41,7 @@ import HomeRecommend from './childComponents/HomeRecommend'
 import HomeFeature from './childComponents/HomeFeature'
 
 import { getHomeMultidata, getHomeGoods } from 'network/home'
+import { debounce } from 'common/utils.js'
 
 import BackTop from 'components/content/backTop/BackTop'
 export default {
@@ -82,7 +83,7 @@ export default {
   },
   mounted() {
     // 图片加载完成的事件监听
-    const refresh = this.debounce(this.$refs.Scroll.refresh, 500)
+    const refresh = debounce(this.$refs.Scroll.refresh, 500)
     this.$bus.$on('itemImageLoad', () => {
       refresh()
       // this.$refs.Scroll.refresh()
@@ -140,16 +141,6 @@ export default {
       this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
     },
 
-    // 防抖动的记录
-    debounce(func, delay) {
-      let timer = null
-      return function(...args) {
-        if (timer) clearTimeout(timer)
-        timer = setTimeout(() => {
-          func.apply(this, args)
-        }, delay)
-      }
-    },
     // 网络请求
     getHomeMultidata() {
       getHomeMultidata().then(
