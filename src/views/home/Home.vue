@@ -41,11 +41,13 @@ import HomeRecommend from './childComponents/HomeRecommend'
 import HomeFeature from './childComponents/HomeFeature'
 
 import { getHomeMultidata, getHomeGoods } from 'network/home'
-import { debounce } from 'common/utils.js'
+
+import { itemListenerMixin } from 'common/mixin.js'
 
 import BackTop from 'components/content/backTop/BackTop'
 export default {
   name: 'Home',
+  mixins: [itemListenerMixin],
   components: {
     NavBar,
     HomeSwiper,
@@ -83,11 +85,6 @@ export default {
   },
   mounted() {
     // 图片加载完成的事件监听
-    const refresh = debounce(this.$refs.Scroll.refresh, 500)
-    this.$bus.$on('itemImageLoad', () => {
-      refresh()
-      // this.$refs.Scroll.refresh()
-    })
 
     // 获取tabControl的offsetTop
     this.$bus.$on('swiperImageLoad', () => {
@@ -97,6 +94,8 @@ export default {
   },
   destroyed() {
     // console.log('home destroyed')
+    // 取消全局事件监听
+    this.$bus.$off('itemImgLoad', this.itemImgListener)
   },
   activated() {
     this.$refs.Scroll.scrollTop(0, this.saveY, 0)

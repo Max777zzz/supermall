@@ -20,11 +20,7 @@ export default {
   },
   methods: {
     imageLoad() {
-      if (this.$route.path.indexOf('/home')) {
-        this.$bus.$emit('itemImageLoad')
-      } else if (this.$route.path.indexOf('/detail')) {
-        this.$bus.$emit('ItemImgLoad')
-      }
+      this.$bus.$emit('itemImgLoad')
     },
     goodsItemClick() {
       this.$router.push('/detail/' + this.goodsItem.iid)

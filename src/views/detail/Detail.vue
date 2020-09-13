@@ -25,7 +25,7 @@ import DetailCommentInfo from './childComponents/DetailCommentInfo'
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
 
-import { debounce } from 'common/utils.js'
+import { itemListenerMixin } from 'common/mixin.js'
 
 import {
   getDetail,
@@ -37,6 +37,7 @@ import {
 
 export default {
   name: 'Detail',
+  mixins: [itemListenerMixin],
   components: {
     DetailNavBar,
     DetailSwiper,
@@ -100,11 +101,10 @@ export default {
         this.recommends = res.data.list
       })
   },
-  mounted() {
-    const refresh = debounce(this.$refs.Scroll.refresh, 500)
-    this.$bus.$on('itemImgLoad', () => {
-      refresh()
-    })
+  mounted() {},
+  destroyed() {
+    // 取消全局事件监听
+    this.$bus.$off('itemImgLoad', this.itemImgListener)
   },
   methods: {
     imageLoad() {
