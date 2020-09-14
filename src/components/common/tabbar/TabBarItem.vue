@@ -14,7 +14,7 @@ export default {
     path: String,
     activeColor: {
       type: String,
-      default: 'blueviolet',
+      default: 'rgb(250, 123, 162)',
     },
   },
   data() {

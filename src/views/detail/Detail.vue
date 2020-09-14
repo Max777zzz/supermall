@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="nav-bar" />
-    <scroll class="content" ref="Scroll">
+    <detail-nav-bar class="nav-bar" @titleClick="titleClick" />
+    <scroll class="content" ref="Scroll" @scroll="contentScroll" :probeType="3">
       <detail-swiper :topImages="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad" />
-      <detail-param-info :paramInfo="paramInfo" />
-      <detail-comment-info :commentInfo="commentInfo" />
-      <goods-list class="goodsList" :goods="recommends" />
+      <detail-param-info :paramInfo="paramInfo" ref="params" />
+      <detail-comment-info :commentInfo="commentInfo" ref="comment" />
+      <goods-list class="goodsList" :goods="recommends" ref="recommends" />
     </scroll>
   </div>
 </template>
@@ -25,6 +25,7 @@ import DetailCommentInfo from './childComponents/DetailCommentInfo'
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
 
+import { debounce } from 'common/utils.js'
 import { itemListenerMixin } from 'common/mixin.js'
 
 import {
@@ -59,6 +60,9 @@ export default {
       paramInfo: {},
       commentInfo: {},
       recommends: [],
+      TopYs: [],
+      getTopYs: null,
+      NavBarindex: null,
     }
   },
   created() {
@@ -96,12 +100,24 @@ export default {
       if (data.rate.cRate !== 0) {
         this.commentInfo = data.rate.list[0]
       }
-    }),
-      getRecommend().then((res) => {
-        this.recommends = res.data.list
-      })
+    })
+    // 请求推荐数据
+    getRecommend().then((res) => {
+      this.recommends = res.data.list
+    })
+    // 对getTopYs赋值的操作进行防抖操作
+    this.getTopYs = debounce(() => {
+      this.TopYs = []
+      this.TopYs.push(0)
+      this.TopYs.push(this.$refs.params.$el.offsetTop)
+      this.TopYs.push(this.$refs.comment.$el.offsetTop)
+      this.TopYs.push(this.$refs.recommends.$el.offsetTop)
+
+      console.log(this.TopYs)
+    })
   },
   mounted() {},
+  updated() {},
   destroyed() {
     // 取消全局事件监听
     this.$bus.$off('itemImgLoad', this.itemImgListener)
@@ -109,6 +125,33 @@ export default {
   methods: {
     imageLoad() {
       this.$refs.Scroll.refresh()
+      this.getTopYs()
+
+      // 图片加载完后
+      // this.TopYs = []
+      // this.TopYs.push(0)
+      // this.TopYs.push(this.$refs.params.$el.offsetTop)
+      // this.TopYs.push(this.$refs.comment.$el.offsetTop)
+      // this.TopYs.push(this.$refs.recommends.$el.offsetTop)
+
+      // console.log(this.TopYs)
+    },
+    titleClick(index) {
+      // console.log(index)
+      this.$refs.Scroll.scrollTop(0, -this.TopYs[index] + 42)
+    },
+    contentScroll(position) {
+      // 获取y值
+      const positionY = -position.y
+
+      // position和标题的值进行对比
+      // [0,7938,9120,9452]
+      // 0~7938 0     7938~9120 1     9120~9452 2     9452> 3
+      for (let i in this.TopYs) {
+        if (positionY > this.TopYs[i] && positionY < this.TopYs[i + 1]) {
+          console.log(i)
+        }
+      }
     },
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <nav-bar>
-      <div slot="center">购物街</div>
+      <div slot="center">Lemon小铺</div>
     </nav-bar>
     <tab-control
       ref="tabControl1"
@@ -88,7 +88,7 @@ export default {
 
     // 获取tabControl的offsetTop
     this.$bus.$on('swiperImageLoad', () => {
-      console.log(this.$refs.tabControl2.$el.offsetTop)
+      // console.log(this.$refs.tabControl2.$el.offsetTop)
       this.swiperImageLoad()
     })
   },
@@ -103,7 +103,7 @@ export default {
   },
   deactivated() {
     this.saveY = this.$refs.Scroll.getScrollY()
-    console.log(this.saveY)
+    // console.log(this.saveY)
   },
   methods: {
     // 事件监听
