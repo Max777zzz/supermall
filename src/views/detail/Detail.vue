@@ -10,6 +10,8 @@
       <detail-comment-info :commentInfo="commentInfo" ref="comment" />
       <goods-list class="goodsList" :goods="recommends" ref="recommends" />
     </scroll>
+    <detail-bottom-bar @addCart="addToCart" />
+    <back-top @click.native="backClick" v-show="isShow" />
   </div>
 </template>
 
@@ -21,12 +23,13 @@ import DetailShopInfo from './childComponents/DetailShopInfo'
 import DetailGoodsInfo from './childComponents/DetailGoodsInfo'
 import DetailParamInfo from './childComponents/DetailParamInfo'
 import DetailCommentInfo from './childComponents/DetailCommentInfo'
+import DetailBottomBar from './childComponents/DetailBottomBar'
 
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
 
 import { debounce } from 'common/utils.js'
-import { itemListenerMixin } from 'common/mixin.js'
+import { itemListenerMixin, backTopMixin } from 'common/mixin.js'
 
 import {
   getDetail,
@@ -38,7 +41,7 @@ import {
 
 export default {
   name: 'Detail',
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin, backTopMixin],
   components: {
     DetailNavBar,
     DetailSwiper,
@@ -47,6 +50,7 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
+    DetailBottomBar,
     Scroll,
     GoodsList,
   },
@@ -62,7 +66,7 @@ export default {
       recommends: [],
       TopYs: [],
       getTopYs: null,
-      NavBarindex: null,
+      currentIndex: 0,
     }
   },
   created() {
@@ -112,12 +116,11 @@ export default {
       this.TopYs.push(this.$refs.params.$el.offsetTop)
       this.TopYs.push(this.$refs.comment.$el.offsetTop)
       this.TopYs.push(this.$refs.recommends.$el.offsetTop)
+      this.TopYs.push(Number.MAX_VALUE)
 
       console.log(this.TopYs)
     })
   },
-  mounted() {},
-  updated() {},
   destroyed() {
     // 取消全局事件监听
     this.$bus.$off('itemImgLoad', this.itemImgListener)
@@ -146,12 +149,48 @@ export default {
 
       // position和标题的值进行对比
       // [0,7938,9120,9452]
-      // 0~7938 0     7938~9120 1     9120~9452 2     9452> 3
-      for (let i in this.TopYs) {
-        if (positionY > this.TopYs[i] && positionY < this.TopYs[i + 1]) {
-          console.log(i)
+      // 0~7938 0     7938~9120 1     9120~9452 2     9452>Number.MAN_VALUE 3
+      let length = this.TopYs.length
+      // 普通写法
+      // for (let i = 0; i < length; i++) {
+      // if (
+      //   this.currentIndex !== i &&
+      //   ((i < length - 1 &&
+      //     positionY >= this.TopYs[i] &&
+      //     positionY < this.TopYs[i + 1]) ||
+      //     (i === length - 1 && positionY >= this.TopYs[i]))
+      // ) {
+      //   this.currentIndex = i
+      //   console.log(this.currentIndex)
+      // }
+
+      // hark写法
+      // 在 TopYs 中添加一个无限大的值，使其变成四个区间
+      for (let i = 0; i < length - 1; i++) {
+        if (
+          this.currentIndex !== i &&
+          positionY >= this.TopYs[i] &&
+          positionY < this.TopYs[i + 1]
+        ) {
+          this.currentIndex = i
+          // console.log(this.currentIndex)
         }
       }
+
+      //  是否显示回到顶部
+      this.isShow = -position.y > 1000
+    },
+    addToCart() {
+      // 1.获取购物车需要展示的信息
+      const product = {}
+      product.iid = this.iid
+      product.image = this.topImages[0]
+      product.title = this.goods.title
+      product.desc = this.goods.desc
+      product.price = this.goods.realPrice
+
+      // 2.将商品添加到购物车
+      this.$store.commit('addCart', product)
     },
   },
 }
@@ -170,10 +209,10 @@ export default {
   background-color: #fff;
 }
 .content {
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 58px);
   overflow: hidden;
 }
 .goodsList {
-  padding: 10px 0;
+  padding: 10px 0 0 0;
 }
 </style>

@@ -42,12 +42,10 @@ import HomeFeature from './childComponents/HomeFeature'
 
 import { getHomeMultidata, getHomeGoods } from 'network/home'
 
-import { itemListenerMixin } from 'common/mixin.js'
-
-import BackTop from 'components/content/backTop/BackTop'
+import { itemListenerMixin, backTopMixin } from 'common/mixin.js'
 export default {
   name: 'Home',
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin, backTopMixin],
   components: {
     NavBar,
     HomeSwiper,
@@ -56,7 +54,6 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
   },
   data() {
     return {
@@ -69,7 +66,6 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: 'pop',
-      isShow: false,
       tabOffsetTop: 0,
       isTabFixed: false,
       saveY: 0,
@@ -122,9 +118,6 @@ export default {
       }
       this.$refs.tabControl1.currentIndex = index
       this.$refs.tabControl2.currentIndex = index
-    },
-    backClick() {
-      this.$refs.Scroll.scrollTop(0, 0)
     },
     contentScroll(position) {
       // 判断BackTop是否显示

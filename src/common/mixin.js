@@ -17,3 +17,20 @@ export const itemListenerMixin = {
     // console.log("123456");
   }
 }
+
+import BackTop from 'components/content/backTop/BackTop'
+export const backTopMixin = {
+  components: {
+    BackTop
+  },
+  data() {
+    return {
+      isShow: false
+    }
+  },
+  methods: {
+    backClick() {
+      this.$refs.Scroll.scrollTop(0, 0)
+    },
+  }
+}
