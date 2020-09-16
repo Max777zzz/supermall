@@ -34,7 +34,7 @@ export default {
 
 <style scoped>
 .bottom-bar {
-  height: 58px;
+  height: 50px;
   background-color: #fff;
   position: relative;
 
@@ -49,13 +49,13 @@ export default {
   flex: 1;
 }
 .bar-left .text {
-  font-size: 13px;
+  font-size: 12px;
 }
 .bar-left .icon {
   display: block;
   width: 22px;
   height: 22px;
-  margin: 10px auto 3px;
+  margin: 5px auto 3px;
   background: url('~assets/img/detail/detail_bottom.png') 0 0/100%;
 }
 .bar-left .service {
@@ -65,9 +65,9 @@ export default {
   background-position: 0 -98px;
 }
 .bar-right {
-  font-size: 15px;
+  font-size: 14px;
   color: #fff;
-  line-height: 58px;
+  line-height: 50px;
 }
 .bar-right .cart {
   background-color: #ffe817;

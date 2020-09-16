@@ -18,7 +18,7 @@ export default {
   line-height: 44px;
   text-align: center;
   color: #eee;
-  background-color: rgb(250, 123, 162);
+  background-color: blueviolet;
 }
 .left,
 .right {

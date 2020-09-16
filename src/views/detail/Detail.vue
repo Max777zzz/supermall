@@ -2,6 +2,11 @@
   <div id="detail">
     <detail-nav-bar class="nav-bar" @titleClick="titleClick" />
     <scroll class="content" ref="Scroll" @scroll="contentScroll" :probeType="3">
+      <ul>
+        <li v-for="item in $store.state.cartList" :key="item.iid">
+          {{ item }}
+        </li>
+      </ul>
       <detail-swiper :topImages="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
@@ -190,7 +195,9 @@ export default {
       product.price = this.goods.realPrice
 
       // 2.将商品添加到购物车
-      this.$store.commit('addCart', product)
+      // this.$store.commit('addCart', product)
+      // 最好通过actions异步操作，可以监听到数据变化
+      this.$store.dispatch('addCart', product)
     },
   },
 }
@@ -209,7 +216,7 @@ export default {
   background-color: #fff;
 }
 .content {
-  height: calc(100% - 44px - 58px);
+  height: calc(100% - 44px - 50px);
   overflow: hidden;
 }
 .goodsList {
