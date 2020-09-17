@@ -53,8 +53,8 @@ export default {
 }
 .titles {
   word-break: keep-all;
-  white-space: nowrap;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 </style>
