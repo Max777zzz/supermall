@@ -192,7 +192,14 @@ export default {
       // 2.将商品添加到购物车
       // this.$store.commit('addCart', product)
       // 最好通过actions异步操作，可以监听到数据变化
-      this.$store.dispatch('addCart', product)
+      this.$store.dispatch('addCart', product).then((res) => {
+        this.show = true
+        this.message = res
+        setTimeout(() => {
+          this.show = false
+          this.message = ''
+        }, 1500)
+      })
     },
   },
 }
