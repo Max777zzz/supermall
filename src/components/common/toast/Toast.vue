@@ -17,6 +17,23 @@ export default {
       default: false,
     },
   },
+  methods: {
+    show(message, duration) {
+      this.show = true
+      this.message = message
+
+      setTimeout(() => {
+        this.show = false
+        this.message = ''
+      }, duration)
+    },
+  },
+  data() {
+    return {
+      message: '',
+      show: false,
+    }
+  },
 }
 </script>
 
