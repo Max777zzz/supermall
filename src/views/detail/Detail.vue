@@ -31,6 +31,8 @@ import GoodsList from 'components/content/goods/GoodsList'
 import { debounce } from 'common/utils.js'
 import { itemListenerMixin, backTopMixin } from 'common/mixin.js'
 
+import { mapActions } from 'vuex'
+
 import {
   getDetail,
   getRecommend,
@@ -126,6 +128,7 @@ export default {
     this.$bus.$off('itemImgLoad', this.itemImgListener)
   },
   methods: {
+    ...mapActions(['addCart']),
     imageLoad() {
       this.$refs.Scroll.refresh()
       this.getTopYs()
@@ -192,13 +195,16 @@ export default {
       // 2.将商品添加到购物车
       // this.$store.commit('addCart', product)
       // 最好通过actions异步操作，可以监听到数据变化
-      this.$store.dispatch('addCart', product).then((res) => {
-        this.show = true
-        this.message = res
-        setTimeout(() => {
-          this.show = false
-          this.message = ''
-        }, 1500)
+      // this.$store.dispatch('addCart', product).then((res) => {
+      // this.show = true
+      // this.message = res
+      // setTimeout(() => {
+      //   this.show = false
+      //   this.message = ''
+      // }, 1500)
+
+      this.addCart(product).then((res) => {
+        this.$toast.show(res, 1500)
       })
     },
   },
