@@ -19,13 +19,14 @@
 
 <script>
 import CheckButton from 'components/content/checkButton'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'cartBottomBar',
   components: {
     CheckButton,
   },
   methods: {
+    ...mapActions(['textCart']),
     allCheckClick() {
       if (this.isAllChecked) {
         //isAllChecked = true 全部选中
@@ -36,8 +37,9 @@ export default {
       }
     },
     clacClick() {
-      if (!isAllChecked) {
-      }
+      this.textCart(this.cartList).then((res) => {
+        this.$toast.show(res, 2000)
+      })
     },
   },
   computed: {
@@ -45,7 +47,7 @@ export default {
     totalPrice() {
       return (
         '￥' +
-        this.$store.state.cartList
+        this.cartList
           .filter((item) => item.checked)
           .reduce((preValue, item) => {
             return preValue + item.price * item.count

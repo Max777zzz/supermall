@@ -204,7 +204,7 @@ export default {
       // }, 1500)
 
       this.addCart(product).then((res) => {
-        this.$toast.show(res, 1500)
+        this.$toast.show(res, 2000)
       })
     },
   },

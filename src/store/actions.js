@@ -13,5 +13,14 @@ export default {
         resolve('新产品加入购物车')
       }
     })
+  },
+  textCart(context, payload) {
+    return new Promise((resolve, reject) => {
+      if (payload.length > 0) {
+        resolve('正在结算...')
+      } else {
+        resolve('请添加产品')
+      }
+    })
   }
 }
