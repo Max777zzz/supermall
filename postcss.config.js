@@ -1,14 +1,19 @@
 module.exports = {
   plugins: {
     autoprefixer: {},
-    "postcss-px-to-viewport": {
+    'postcss-px-to-viewport': {
       viewportWidth: 375, // 视窗宽
       viewportHeight: 667, // 视窗高
       unitPrecision: 5, // 指定‘px’转换为视窗单位值的小数点后位数
       viewportUnit: 'vw', // 指定转换后的单位
       selectorBlackList: ['ignore', 'tab-bar', 'tab-bar-item'], // 指定不需要转换的元素
       minPixelValue: 20, // 小于或等于‘1px’不转换单位
-      mediaQuery: false // 循序在媒体查询中转换‘px’
-    }
-  }
+      mediaQuery: false, // 循序在媒体查询中转换‘px’
+      exclude: [/^TabBar/],
+    },
+  },
 }
+
+// 正则规则
+// 1. ^abc 以 abc 开头的内容
+// 2. abc$ 以 abc 结尾的内容
