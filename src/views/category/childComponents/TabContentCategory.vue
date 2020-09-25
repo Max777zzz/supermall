@@ -1,0 +1,11 @@
+<template>
+  <div id="TabContentCategory"></div>
+</template>
+
+<script>
+export default {
+  name: 'TabContentCategory',
+}
+</script>
+
+<style scoped></style>
