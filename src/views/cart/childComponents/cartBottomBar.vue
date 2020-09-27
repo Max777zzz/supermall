@@ -59,6 +59,7 @@ export default {
       return this.cartList.filter((item) => item.checked).length
     },
     isAllChecked() {
+      if (this.cartList.length === 0) return false
       return this.cartList.every((item) => item.checked)
     },
   },
