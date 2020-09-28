@@ -1,7 +1,7 @@
 <template>
   <div id="Category">
-    <nav-bar
-      ><div slot="center">
+    <nav-bar>
+      <div slot="center">
         分类
       </div></nav-bar
     >
@@ -13,21 +13,26 @@
         :probe-type="3"
         @scroll="contentScroll"
       >
-        <tab-control
+        <!-- <tab-control
           :titles="['综合', '新品', '销量']"
           @tabClick="tabClick"
           ref="tabControl1"
           :class="{ isfixed: isFixed }"
           v-show="isShow"
           class="tab-control"
-        />
-
-        <tab-control
-          :titles="['综合', '新品', '销量']"
-          @tabClick="tabClick"
-          ref="tabControl2"
-          :class="{ isfixed: isFixed }"
-        />
+        /> -->
+        <div @swiperImageLoad="swiperImageLoad">
+          <tab-content-category
+            :subcategories="showSubcategory"
+          ></tab-content-category>
+          <tab-control
+            :titles="['综合', '新品', '销量']"
+            @tabClick="tabClick"
+            ref="tabControl2"
+            :class="{ isfixed: isFixed }"
+          />
+          <!-- <tab-content-detail :category-detail="showCategoryDetail" /> -->
+        </div>
       </scroll>
     </div>
   </div>
@@ -38,6 +43,8 @@ import NavBar from 'components/common/navbar/NavBar'
 import Scroll from 'components/common/scroll/Scroll'
 import TabControl from 'components/content/TabControl'
 import TabMenu from './childComponents/TabMenu'
+import TabContentCategory from './childComponents/TabContentCategory'
+// import TabContentDetail from './childComponents/TabContentDetail'
 
 import {
   getCategory,
@@ -52,6 +59,8 @@ export default {
     Scroll,
     TabMenu,
     TabControl,
+    TabContentCategory,
+    // TabContentDetail,
   },
   created() {
     this._getCategory()
@@ -59,8 +68,6 @@ export default {
   data() {
     return {
       getCategories: [],
-      getSubcategories: [],
-      getCategoryDetail: [],
       categoryData: {},
       currentIndex: -1,
       isFixed: false,
@@ -84,6 +91,7 @@ export default {
             },
           }
         }
+        this._getSubcategories(0)
       })
     },
     _getSubcategories(index) {
@@ -99,6 +107,13 @@ export default {
         // this._getCategoryDetail('new')
       })
     },
+    // _getCategoryDetail(type) {
+    //   const miniWallkey = this.getCategories[this.currentIndex].miniWallkey
+    //   getCategoryDetail(miniWallkey, type).then((res) => {
+    //     this.categoryData[this.currentIndex].categoryDetail[type] = res
+    //     this.categoryData = { ...this.categoryData }
+    //   })
+    // },
     selectItem(index) {
       this._getSubcategories(index)
     },
@@ -126,10 +141,6 @@ export default {
       this.isShow = -position.y > this.$refs.tabControl2.$el.offsetTop
       // console.log(position)
       console.log(this.$refs.tabControl2.$el.offsetTop)
-    },
-    swiperImageLoad() {
-      // 2.获取tabControl的offsetTop
-      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
     },
   },
   computed: {
